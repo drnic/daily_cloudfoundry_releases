@@ -14,7 +14,7 @@ Final releases are a very useful concept in BOSH. They are a frozen snapshot of 
 
 ## Plan for implementation
 
-My thinking at the moment is to have a `rake release` task that is run via Travis or Jenkins whenever the [release-candidate](https://github.com/cloudfoundry/cf-release/commits/release-candidate) branch of the BOSH [cf-release](https://github.com/cloudfoundry/cf-release/) is updated. This will probably require a github hook added with Pivotal's permission.
+My thinking at the moment is to have a `rake cf:release` task that is run via Travis or Jenkins whenever the [release-candidate](https://github.com/cloudfoundry/cf-release/commits/release-candidate) branch of the BOSH [cf-release](https://github.com/cloudfoundry/cf-release/) is updated. This will probably require a github hook added with Pivotal's permission.
 
 ### How we create a final release of someone else's BOSH release repository
 
@@ -22,7 +22,7 @@ Currently, only the owner of a BOSH release can create final releases. Specifica
 
 Only Pivotal employees have write-access credentials to their ATMOS blobstore (the `config/private.yml` file) so we have to work around this. But these same idea could be used to create final releases for anyone's BOSH release where you don't have the private blobstore credentials.
 
-Specially, the `rake release` task performs the following sequence:
+Specially, the `rake cf:release` task performs the following sequence:
 
 1. Clone or update the `cf-release` repository.
 2. Rename the following folders related to releases: `.final_builds`, `config`, and `releases`.

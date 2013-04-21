@@ -1,4 +1,4 @@
-describe "rake release" do
+describe "rake cf:release" do
   it "can be found" do
     `rake -T cf:release | grep cf:release`.strip.size.should > 0
   end
