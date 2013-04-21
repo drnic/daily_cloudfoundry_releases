@@ -1,0 +1,21 @@
+language: ruby
+script: bundle exec rake spec:$SUITE
+bundler_args: "--local"
+rvm:
+  - ruby-1.9.3
+notifications:
+  email:
+    recipients:
+      - drnicwilliams@gmail.com
+    on_success: change
+    on_failure: always
+env:
+  matrix:
+    - SUITE=unit
+    - SUITE=integration
+  global:
+    - secure: ""
+matrix:
+  allow_failures:
+    - env: SUITE=xyz
+        
