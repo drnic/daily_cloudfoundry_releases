@@ -1,5 +1,7 @@
 # Daily CloudFoundry releases
 
+[![Build Status](https://travis-ci.org/drnic/daily_cloudfoundry_releases.png?branch=master)](https://travis-ci.org/drnic/daily_cloudfoundry_releases)
+
 Task to create final BOSH releases of cf-release for everyone to use.
 
 Currently, the `cf-release` project is not publishing final releases for updated Cloud Foundry v1 nor v2 components. This means you can only build a Cloud Foundry deployment based on the HEAD commit of the `master` or `release-candidates` branch and you have to create a development release rather than use a much faster final release.
