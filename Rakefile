@@ -10,6 +10,11 @@ require "rake/dsl_definition"
 require "rake"
 require "rspec/core/rake_task"
 
+namespace :cf do
+  desc "Attempt to create new cf-release final release"
+  task :release do
+  end
+end
 
 if defined?(RSpec)
   namespace :spec do

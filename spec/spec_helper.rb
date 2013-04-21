@@ -9,9 +9,6 @@ Bundler.setup(:default, :test)
 $:.unshift(File.expand_path("../../lib", __FILE__))
 
 require "rspec/core"
-require "bosh/providers"
-require "bosh-bootstrap"
-require "bosh-bootstrap/cli"
 
 # for the #sh helper
 require "rake"
