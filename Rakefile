@@ -51,10 +51,13 @@ gem "bosh_cli", "~> 1.5.0.pre"
         RUBY
       end
 
-      ENV["BUNDLE_GEMFILE"] = ""
-      sh "bundle install"
-      sh "./update"
-      sh "bundle exec bosh sync blobs"
+      Bundler.with_clean_env do
+        ENV['NOEXEC']="skip"
+
+        sh "bundle install"
+        sh "./update"
+        sh "bundle exec bosh sync blobs"
+      end
     end
 
     chdir(cf_release_dir) do
@@ -86,7 +89,11 @@ gem "bosh_cli", "~> 1.5.0.pre"
       File.open("config/blobs.yml", "w") { |file| file << {}.to_yaml }
 
       # create new final release
-      sh "bundle exec bosh -n create release --final --force"
+      Bundler.with_clean_env do
+        ENV['NOEXEC']="skip"
+
+        sh "bundle exec bosh -n create release --final --force"
+      end
     end
 
 
