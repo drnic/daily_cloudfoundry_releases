@@ -13,11 +13,20 @@ require "rspec/core/rake_task"
 namespace :cf do
   desc "Attempt to create new cf-release final release"
   task :release do
-    include FileUtils
-    cf_release_dir = File.expand_path("tmp/cf-release")
+    require "yaml"
+    unless ENV['AWS_ACCESS_KEY'] && ENV['AWS_SECRET_KEY']
+      $stderr.puts "Please provide $AWS_ACCESS_KEY and $AWS_SECRET_KEY to run task"
+      exit 1
+    end
+
+    aws_access_key = ENV['AWS_ACCESS_KEY']
+    aws_secret_key = ENV['AWS_SECRET_KEY']
+    blobstore_name = ENV['BLOBSTORE_NAME'] || 'daily-cloudfoundry-releases'
+    project_dir = File.expand_path(ENV["PROJECT_DIR"] || ".")
+    cf_release_dir = File.expand_path(ENV["CF_RELEASE_DIR"] || "tmp/cf-release")
+
     git_repo = ENV["CF_RELEASE_GIT"] || "https://github.com/cloudfoundry/cf-release.git"
     git_branch = ENV["CF_RELEASE_BRANCH"] || "release-candidate"
-    project_dir = File.expand_path(ENV["PROJECT_DIR"] || ".")
     if File.directory?(cf_release_dir)
       chdir(cf_release_dir) do
         sh "git pull"
@@ -29,16 +38,51 @@ namespace :cf do
     release_dirs = %w[.final_builds releases config]
 
     # temporarily rename release folders within +cf_release_dir+
-    # copy in our release folders (config)
-    # create new final release
+    release_dirs.each do |dir|
+      mv(File.join(cf_release_dir, dir), File.join(cf_release_dir, "#{dir}.orig"))
+    end
+
+    mkdir_p(project_dir)
+    chdir(project_dir) do
+      # copy in our release folders (config)
+      mkdir_p("config")
+      File.open("final.yml", "w") do |file|
+        { "blobstore" => {
+            "provider" => "s3",
+            "options" => {
+              "bucket_name" => "BOSH",
+              "access_key_id" => aws_access_key,
+              "secret_access_key" => aws_secret_key,
+              "encryption_key" => "PERSONAL_RANDOM_KEY",
+            }
+          }
+        }.to_yaml
+      end
+      File.open("private.yml", "w") do |file|
+        { "blobstore" => {
+            "s3" => {
+              "access_key_id" => aws_access_key,
+              "secret_access_key" => aws_secret_key
+            }
+          }
+        }.to_yaml
+      end
+      File.open("blobs.yml", "w") { |file| {}.to_yaml }
+
+      # create new final release
+    end
+
 
     # copy release folders back into +project_dir+
-    mkdir_p(project_dir)
     release_dirs.each do |dir|
       cp_r(File.join(cf_release_dir, dir), project_dir)
     end
 
     # rename release folders back within +cf_release_dir+
+    release_dirs.each do |dir|
+      rm_rf(File.join(cf_release_dir, dir))
+      mv(File.join(cf_release_dir, "#{dir}.orig"), File.join(cf_release_dir, dir))
+    end
   end
 end
 

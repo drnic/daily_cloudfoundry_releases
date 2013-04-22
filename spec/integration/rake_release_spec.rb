@@ -10,14 +10,16 @@ describe "rake cf:release" do
   before do
     pending_without_blobstore_credentials
     delete_blobstore(blobstore_name)
-    override_project_location
+    delete_test_project_dir
+    override_project_settings
     sh "bundle exec rake cf:release"
   end
 
   it "created release folders in this project" do
+    File.should be_exist("#{project_dir}/config/final.yml")
+    File.should be_exist("#{project_dir}/config/private.yml")
     File.should be_directory("#{project_dir}/.final_builds")
     File.should be_directory("#{project_dir}/releases")
-    File.should be_exist("#{project_dir}/config/final.yml")
   end
 
 end
