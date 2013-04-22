@@ -13,22 +13,31 @@ require "rspec/core/rake_task"
 namespace :cf do
   desc "Attempt to create new cf-release final release"
   task :release do
+    include FileUtils
     cf_release_dir = File.expand_path("tmp/cf-release")
     git_repo = ENV["CF_RELEASE_GIT"] || "https://github.com/cloudfoundry/cf-release.git"
     git_branch = ENV["CF_RELEASE_BRANCH"] || "release-candidate"
     project_dir = File.expand_path(ENV["PROJECT_DIR"] || ".")
     if File.directory?(cf_release_dir)
-      FileUtils.chdir(cf_release_dir) do
+      chdir(cf_release_dir) do
         sh "git pull"
       end
     else
       sh "git clone --single-branch -b #{git_branch} #{git_repo} #{cf_release_dir}"
     end
 
+    release_dirs = %w[.final_builds releases config]
+
     # temporarily rename release folders within +cf_release_dir+
     # copy in our release folders (config)
     # create new final release
+
     # copy release folders back into +project_dir+
+    mkdir_p(project_dir)
+    release_dirs.each do |dir|
+      cp_r(File.join(cf_release_dir, dir), project_dir)
+    end
+
     # rename release folders back within +cf_release_dir+
   end
 end
