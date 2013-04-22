@@ -26,7 +26,7 @@ namespace :cf do
     blobstore_name = ENV['BLOBSTORE_NAME'] || 'daily-cloudfoundry-releases'
     release_name   = ENV['RELEASE_NAME'] || "appcloud-daily"
     project_dir = File.expand_path(ENV["PROJECT_DIR"] || ".")
-    cf_release_dir = File.expand_path(ENV["CF_RELEASE_DIR"] || "tmp/cf-release")
+    cf_release_dir = File.expand_path(ENV["CF_RELEASE_DIR"] || "/tmp/cf-release")
 
     git_repo = ENV["CF_RELEASE_GIT"] || "https://github.com/cloudfoundry/cf-release.git"
     git_branch = ENV["CF_RELEASE_BRANCH"] || "release-candidate"
@@ -52,8 +52,6 @@ gem "bosh_cli", "~> 1.5.0.pre"
       end
 
       ENV["BUNDLE_GEMFILE"] = File.join(cf_release_dir, "Gemfile")
-      mkdir_p ".bundle"
-      sh "touch .bundle/config"
       sh "bundle"
       sh "./update"
       sh "bundle exec bosh sync blobs"

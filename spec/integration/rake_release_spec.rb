@@ -4,7 +4,7 @@ describe "rake cf:release" do
   include FileUtils
 
   let(:blobstore_name) { 'daily-cloudfoundry-releases-test' }
-  let(:cf_release_dir) { File.expand_path("../../../tmp/cf-release", __FILE__) }
+  let(:cf_release_dir) { "/tmp/cf-release" }
   let(:project_dir) { File.expand_path("../../../tmp/project", __FILE__) }
 
   before do
