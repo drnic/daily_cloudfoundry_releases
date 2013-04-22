@@ -42,7 +42,6 @@ namespace :cf do
 
     chdir(cf_release_dir) do
       sh "git checkout ."
-      sh "./update"
 
       File.open("Gemfile", "w") do |file|
         file << <<-RUBY
@@ -54,15 +53,9 @@ gem "bosh_cli"
 
       ENV["BUNDLE_GEMFILE"] = File.join(cf_release_dir, "Gemfile")
       sh "bundle"
+      sh "./update"
       sh "bundle exec bosh sync blobs"
     end
-
-    # temporarily rename release folders within +cf_release_dir+
-    release_dirs.each do |dir|
-      # mv(File.join(cf_release_dir, dir), File.join(cf_release_dir, "#{dir}.orig"))
-    end
-
-    mkdir_p(project_dir)
 
     chdir(cf_release_dir) do
       # copy in our release folders (config)
@@ -96,6 +89,8 @@ gem "bosh_cli"
       sh "bundle exec bosh -n create release --final --force"
     end
 
+
+    mkdir_p(project_dir)
 
     # copy release folders back into +project_dir+
     release_dirs.each do |dir|
