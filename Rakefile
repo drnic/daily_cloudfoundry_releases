@@ -51,8 +51,8 @@ gem "bosh_cli", "~> 1.5.0.pre"
         RUBY
       end
 
-      ENV["BUNDLE_GEMFILE"] = File.join(cf_release_dir, "Gemfile")
-      sh "BUNDLE_GEMFILE=#{File.join(cf_release_dir, "Gemfile")} bundle install"
+      ENV["BUNDLE_GEMFILE"] = ""
+      sh "bundle install"
       sh "./update"
       sh "bundle exec bosh sync blobs"
     end
