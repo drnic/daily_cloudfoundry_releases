@@ -10,6 +10,8 @@ $:.unshift(File.expand_path("../../lib", __FILE__))
 
 require "rspec/core"
 
+require "fog"
+
 # for the #sh helper
 require "rake"
 require "rake/file_utils"

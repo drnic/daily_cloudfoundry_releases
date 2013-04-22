@@ -4,7 +4,7 @@
 
 Task to create final BOSH releases of cf-release for everyone to use.
 
-Currently, the `cf-release` project is not publishing final releases for updated Cloud Foundry v1 nor v2 components. This means you can only build a Cloud Foundry deployment based on the HEAD commit of the `master` or `release-candidates` branch and you have to create a development release rather than use a much faster final release.
+Currently, the `cf-release` project is not publishing final releases for updated Cloud Foundry v1 nor v2 components. This means you can only build a Cloud Foundry deployment based on the HEAD commit of the `master` or `release-candidate` branch and you have to create a development release rather than use a much faster final release.
 
 Hopefully they start cutting final releases soon; but in the meantime this project acts as a stopgap (assuming its finished and running before the create something similar - hurray; that would be perfect by me!)
 
