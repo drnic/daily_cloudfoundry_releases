@@ -47,7 +47,7 @@ namespace :cf do
         file << <<-RUBY
 source 'https://rubygems.org'
 source 'https://s3.amazonaws.com/bosh-jenkins-gems/'
-gem "bosh_cli"
+gem "bosh_cli", "~> 1.5.0.pre"
         RUBY
       end
 
