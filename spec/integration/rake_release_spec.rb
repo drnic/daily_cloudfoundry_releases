@@ -1,10 +1,12 @@
 describe "rake cf:release" do
-  it "can be found" do
-    `rake -T cf:release | grep cf:release`.strip.size.should > 0
-  end
+  include AwsHelpers
   before do
+    pending_without_blobstore_credentials
     # fail fast if no s3 credentials
     # delete s3 blobstore bucket for tests
     # recreate home
+  end
+  it "requires credentials" do
+    puts "hi"
   end
 end

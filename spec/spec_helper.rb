@@ -14,6 +14,8 @@ require "rspec/core"
 require "rake"
 require "rake/file_utils"
 
+Dir[File.dirname(__FILE__) + '/support/*'].each{|path| require path}
+
 def spec_asset(filename)
   File.expand_path("../assets/#{filename}", __FILE__)
 end

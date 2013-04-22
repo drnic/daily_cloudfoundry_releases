@@ -14,7 +14,7 @@ env:
     - SUITE=unit
     - SUITE=integration
   global:
-    - secure: ""
+    - secure: "aVPmOClTasJObcwq3bgpnJ6FOXCqZV3HUbPISkVs/B792ZzDN6m+R4smpNGI\ne3O4gZuFPuT5mv1dlRt9axN4m4zGr6kZ3dDG2JkXqL7XuNaUxmX5G/CLeLhs\nAl4cAgt3SuoqPmGlKn+dXu9V5I98+f/JCf69xNV8udeh0z5vUHM="
 matrix:
   allow_failures:
     - env: SUITE=xyz
