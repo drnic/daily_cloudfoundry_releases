@@ -11,6 +11,8 @@ describe "rake cf:release" do
 
   it "requires credentials" do
     sh "bundle exec rake cf:release"
-    File.should be_directory("tmp/cf-release")
+    File.should be_directory("tmp/cf-release/.final_builds")
+    File.should be_directory("tmp/cf-release/releases")
+    File.should be_exist("tmp/cf-release/config/final.yml")
   end
 end

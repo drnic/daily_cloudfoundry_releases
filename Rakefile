@@ -26,6 +26,10 @@ namespace :cf do
   end
 end
 
+task :cleanup do
+  FileUtils.rm_rf("tmp")
+end
+
 if defined?(RSpec)
   namespace :spec do
     desc "Run Unit Tests"
@@ -42,7 +46,8 @@ if defined?(RSpec)
   end
 
   desc "Run tests"
-  task :spec => %w(spec:unit spec:integration)
+  task :spec => %w(cleanup spec:unit spec:integration)
+
+  task :default => [:spec]
 end
 
-task :default => :spec
