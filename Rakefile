@@ -19,9 +19,12 @@ namespace :cf do
       exit 1
     end
 
+    # get properties for task
+    # TODO $BLOBSTORE_NAME & $RELEASE_NAME should be fixed for the $PROJECT_DIR
     aws_access_key = ENV['AWS_ACCESS_KEY']
     aws_secret_key = ENV['AWS_SECRET_KEY']
     blobstore_name = ENV['BLOBSTORE_NAME'] || 'daily-cloudfoundry-releases'
+    release_name   = ENV['RELEASE_NAME'] || "appcloud-daily"
     project_dir = File.expand_path(ENV["PROJECT_DIR"] || ".")
     cf_release_dir = File.expand_path(ENV["CF_RELEASE_DIR"] || "tmp/cf-release")
 
@@ -37,20 +40,40 @@ namespace :cf do
 
     release_dirs = %w[.final_builds releases config]
 
+    chdir(cf_release_dir) do
+      sh "git checkout ."
+      sh "./update"
+
+      File.open("Gemfile", "w") do |file|
+        file << <<-RUBY
+source 'https://rubygems.org'
+source 'https://s3.amazonaws.com/bosh-jenkins-gems/'
+gem "bosh_cli"
+        RUBY
+      end
+
+      ENV["BUNDLE_GEMFILE"] = File.join(cf_release_dir, "Gemfile")
+      sh "bundle"
+      sh "bundle exec bosh sync blobs"
+    end
+
     # temporarily rename release folders within +cf_release_dir+
     release_dirs.each do |dir|
-      mv(File.join(cf_release_dir, dir), File.join(cf_release_dir, "#{dir}.orig"))
+      # mv(File.join(cf_release_dir, dir), File.join(cf_release_dir, "#{dir}.orig"))
     end
 
     mkdir_p(project_dir)
-    chdir(project_dir) do
+
+    chdir(cf_release_dir) do
       # copy in our release folders (config)
       mkdir_p("config")
-      File.open("final.yml", "w") do |file|
-        { "blobstore" => {
+      File.open("config/final.yml", "w") do |file|
+        file << {
+          "final_name" => release_name,
+          "blobstore" => {
             "provider" => "s3",
             "options" => {
-              "bucket_name" => "BOSH",
+              "bucket_name" => blobstore_name,
               "access_key_id" => aws_access_key,
               "secret_access_key" => aws_secret_key,
               "encryption_key" => "PERSONAL_RANDOM_KEY",
@@ -58,8 +81,8 @@ namespace :cf do
           }
         }.to_yaml
       end
-      File.open("private.yml", "w") do |file|
-        { "blobstore" => {
+      File.open("config/private.yml", "w") do |file|
+        file << { "blobstore" => {
             "s3" => {
               "access_key_id" => aws_access_key,
               "secret_access_key" => aws_secret_key
@@ -67,9 +90,10 @@ namespace :cf do
           }
         }.to_yaml
       end
-      File.open("blobs.yml", "w") { |file| {}.to_yaml }
+      File.open("config/blobs.yml", "w") { |file| file << {}.to_yaml }
 
       # create new final release
+      sh "bundle exec bosh -n create release --final --force"
     end
 
 

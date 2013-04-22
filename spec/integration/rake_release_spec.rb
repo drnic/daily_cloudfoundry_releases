@@ -20,6 +20,7 @@ describe "rake cf:release" do
     File.should be_exist("#{project_dir}/config/private.yml")
     File.should be_directory("#{project_dir}/.final_builds")
     File.should be_directory("#{project_dir}/releases")
+    File.should be_exist("#{project_dir}/releases/appcloud-daily-1.yml")
   end
 
 end
