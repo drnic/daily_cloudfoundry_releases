@@ -52,6 +52,8 @@ gem "bosh_cli", "~> 1.5.0.pre"
       end
 
       ENV["BUNDLE_GEMFILE"] = File.join(cf_release_dir, "Gemfile")
+      mkdir_p ".bundle"
+      sh "touch .bundle/config"
       sh "bundle"
       sh "./update"
       sh "bundle exec bosh sync blobs"
