@@ -25,7 +25,8 @@ module AwsHelpers
       files = directory.files.map{ |file| file.key }
       fog.delete_multiple_objects(bucket, files) unless files.empty?
       directory.destroy
+    else
+      fog_storage.directories.create(key: name, public: true)
     end
-    # fog_storage.directories.create(key: name, public: true)
   end
 end
