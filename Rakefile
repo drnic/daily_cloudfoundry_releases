@@ -91,7 +91,6 @@ gem "bosh_cli", "~> 1.5.0.pre"
           }
         }.to_yaml
       end
-      File.open("config/blobs.yml", "w") { |file| file << {}.to_yaml }
 
       # create new final release
       Bundler.with_clean_env do
