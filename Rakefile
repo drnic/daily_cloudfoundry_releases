@@ -63,6 +63,11 @@ gem "bosh_cli", "~> 1.5.0.pre"
     chdir(cf_release_dir) do
       # copy in our release folders (config)
       mkdir_p("config")
+      File.open("config/dev.yml", "w") do |file|
+        file << {
+          "dev_name" => release_name
+        }.to_yaml
+      end
       File.open("config/final.yml", "w") do |file|
         file << {
           "final_name" => release_name,
@@ -92,6 +97,7 @@ gem "bosh_cli", "~> 1.5.0.pre"
       Bundler.with_clean_env do
         ENV['NOEXEC']="skip"
 
+        sh "bundle exec bosh -n create release --force"
         sh "bundle exec bosh -n create release --final --force"
       end
     end
