@@ -23,7 +23,7 @@ module AwsHelpers
   def delete_blobstore(name)
     if directory = fog_storage.directories.get(name)
       files = directory.files.map{ |file| file.key }
-      fog_storage.delete_multiple_objects(bucket, files) unless files.empty?
+      fog_storage.delete_multiple_objects(name, files) unless files.empty?
     else
       fog_storage.directories.create(key: name, public: true)
     end
