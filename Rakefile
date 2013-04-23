@@ -35,7 +35,7 @@ namespace :cf do
         sh "git pull"
       end
     else
-      if `git clone -h | grep "single-branch"`.strip.size == 0
+      if `git clone -h 2>&1 | grep "single-branch"`.strip.size == 0
         sh "git clone -b #{git_branch} #{git_repo} #{cf_release_dir}"
       else
         sh "git clone --single-branch -b #{git_branch} #{git_repo} #{cf_release_dir}"
