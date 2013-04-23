@@ -57,6 +57,7 @@ gem "bosh_cli", "~> 1.5.0.pre"
         sh "bundle install"
         sh "./update"
         sh "bundle exec bosh sync blobs"
+        sh "bundle exec bosh -n create release --force"
       end
     end
 
@@ -96,7 +97,6 @@ gem "bosh_cli", "~> 1.5.0.pre"
       Bundler.with_clean_env do
         ENV['NOEXEC']="skip"
 
-        sh "bundle exec bosh -n create release --force"
         sh "bundle exec bosh -n create release --final --force"
       end
     end
