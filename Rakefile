@@ -56,7 +56,7 @@ gem "bosh_cli", "~> 1.5.0.pre"
 
         sh "bundle install"
         sh "./update"
-        # sh "bundle exec bosh sync blobs"
+        sh "bundle exec bosh sync blobs"
       end
     end
 
