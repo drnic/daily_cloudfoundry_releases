@@ -1,5 +1,9 @@
 # Daily CloudFoundry releases
 
+STATUS: Failed experiment.
+
+It is really really not easy to create final releases for someone else's bosh release.
+
 [![Build Status](https://travis-ci.org/drnic/daily_cloudfoundry_releases.png?branch=master)](https://travis-ci.org/drnic/daily_cloudfoundry_releases)
 
 Task to create final BOSH releases of cf-release for everyone to use.
