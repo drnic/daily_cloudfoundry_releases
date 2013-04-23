@@ -109,10 +109,10 @@ gem "bosh_cli", "~> 1.5.0.pre"
       cp_r(File.join(cf_release_dir, dir), project_dir)
     end
 
-    # rename release folders back within +cf_release_dir+
-    release_dirs.each do |dir|
-      rm_rf(File.join(cf_release_dir, dir))
-      mv(File.join(cf_release_dir, "#{dir}.orig"), File.join(cf_release_dir, dir))
+    # cleanup for next time
+    chdir(cf_release_dir) do
+      sh "rm config/private.yml"
+      sh "git checkout ."
     end
   end
 end
