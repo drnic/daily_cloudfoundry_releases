@@ -35,7 +35,11 @@ namespace :cf do
         sh "git pull"
       end
     else
-      sh "git clone --single-branch -b #{git_branch} #{git_repo} #{cf_release_dir}"
+      if `git clone -h | grep "single-branch"`.strip.size == 0
+        sh "git clone -b #{git_branch} #{git_repo} #{cf_release_dir}"
+      else
+        sh "git clone --single-branch -b #{git_branch} #{git_repo} #{cf_release_dir}"
+      end
     end
 
     release_dirs = %w[.final_builds releases config]
